@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.19.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: load
+  name: load
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.19.0 ()
+      creationTimestamp: null
+      labels:
+        io.kompose.service: load
+    spec:
+      containers:
+      - args:
+        - wait-for-it
+        - db:5432
+        - --
+        - node
+        - load.js
+        - us
+        env:
+        - name: ACCESS_TOKEN
+        - name: ACCESS_TOKEN_SECRET
+        - name: CONSUMER_KEY
+        - name: CONSUMER_SECRET
+        - name: PGDATABASE
+          value: tweets
+        - name: PGHOST
+          value: db
+        - name: PGPASSWORD
+          value: tweets
+        - name: PGUSER
+          value: tweets
+        image: load
+        name: load
+        resources: {}
+      restartPolicy: Always
+status: {}
